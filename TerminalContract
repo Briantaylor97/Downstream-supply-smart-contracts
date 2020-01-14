@@ -1,0 +1,41 @@
+pragma solidity ^0.5.11;
+
+
+contract TerminalProcess {
+    struct Product {
+        address payable public refinery;
+        string public product_type;
+        string delivery_date;
+        uint public volume;
+        uint usgc_platts;
+    }
+    
+    struct Fees {
+        uint throughput_fee;
+        uint terminal_fee;
+        uint additional_fee;
+        uint excise_FST_gas;
+        uint excise_FST_diesel;
+        uint excise_TX_gas;
+        uint excise_TX_diesel;
+    }
+
+    //Copied from class, ignore for now
+    function setInfo(address newOwner, uint newAccountBalance, string memory newCustomerName) public {
+        owner = newOwner;
+        is_new_account = isNewAccount;
+        account_balance = newAccountBalance;
+        customer_name = newCustomerName;
+    }
+    
+    function payRefinery ();
+
+    //Truck pays terminal
+    function productLifting (
+        );
+
+    function payTruckBranded ();
+
+    function payTruckUnbranded ();
+    
+}
