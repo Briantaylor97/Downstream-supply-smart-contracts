@@ -1,0 +1,61 @@
+pragma solidity ^0.6.0;
+
+//remit payment to refinery for product and fees for delivery to terminal 
+contract TerminalPurchaseTruck {
+    address payable owner;
+    address payable buyer;
+    string deliveryDate;
+    string productType;
+    uint volume;
+    uint usgcPlatts;
+    uint public value;
+    
+    
+    modifier onlyOwner() {
+        require(msg.sender == owner, "You cannot modify this contract");
+        _;
+    }
+    
+    //Fees instantiation
+    // struct Fees {
+    //     uint throughput_fee;
+    //     uint terminal_fee;
+    //     uint additional_fee;
+    //     uint excise_FST_gas;
+    //     uint excise_FST_diesel;
+    //     uint excise_TX_gas;
+    //     uint excise_TX_diesel;
+    // }
+
+    //Set product lifting from Rack.
+    function productLift(string memory Date, address payable TruckBuyer, string memory Product, uint Volume, uint Rack_Price) public payable {
+        Date = deliveryDate;
+        TruckBuyer = buyer;
+        Product = productType;
+        Volume = volume;
+        Rack_Price = value;
+        owner = msg.sender;
+        value = msg.value / 2;
+        require((2 * value) == msg.value);
+    }
+    
+   
+    // function paymentTransfer (uint Volume, uint usgcPlatts uint value){
+    //     ThroughputFee = 
+    //     TerminalFee = uint terminal_fee;
+    //     AdditionalFee = uint additional_fee;
+    //     Excise = uint excise_FST_gas;
+    //     uint excise_TX_gas;
+    //     Price = usgcPlatts + 
+    //     priceByVolume = (volume * Price)
+    // }
+    
+    //volume*Rack_Price to generate invoice
+    
+    // function TerminalPurchase() public payable {
+    //     owner = msg.sender;
+    //     value = msg.value / 2;
+    //     require((2 * value) == msg.value);
+    // }
+    
+}
