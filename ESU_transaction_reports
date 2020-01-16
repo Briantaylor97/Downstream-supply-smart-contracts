@@ -1,0 +1,108 @@
+pragma solidity ^0.5.0;
+
+
+contract OrderRegistry {
+  struct Order {
+    string refinery_name;
+    string terminal_name;
+    string trucking_name;
+    string gasStation_name;
+
+    string refinery_report;
+    string terminal_report;
+    string trucking_report;
+    string gasStation_report;
+
+    uint refinery_quantity;
+    uint terminal_quantity;
+    uint trucking_quantity;
+    uint gasStation_quantity;
+
+    uint refinery_value;
+    uint terminal_value;
+    uint trucking_value;
+    uint gasStation_value;
+
+    string refinery_date;
+    string terminal_date;
+    string trucking_date;
+    string gasStation_date;
+
+    string product_name;
+
+  }
+
+  mapping(string=>Order) registry;
+
+  event OrderGenerated(string orderno);
+  event truckingTrigger(string orderno);
+  event terminalTrigger(string orderno);
+  event refineryTrigger(string orderno);
+  event ReportSubmit(string orderno, uint category, string report);
+
+  function createOrder(string memory orderno, string memory product, uint value, uint quantity, string memory delivery) public {
+    registry[orderno].product_name = product;
+    registry[orderno].terminal_value = value;
+    registry[orderno].terminal_quantity = quantity;
+    registry[orderno].terminal_date = delivery;
+    emit OrderGenerated(orderno);
+  }
+
+  function setTerminalValues(string memory orderno, string memory name, string memory delivery, uint value, uint quantity) public {
+    registry[orderno].terminal_name = name;
+    registry[orderno].terminal_date = delivery;
+    registry[orderno].terminal_value = value;
+    registry[orderno].terminal_quantity = quantity;
+    emit refineryTrigger(orderno);
+  }
+
+ 
+
+  function setReport(string memory orderno,uint category, string memory report) public {
+    if(category == 1) {
+      registry[orderno].refinery_report = report;
+    }
+    if( category == 2 ) {
+      registry[orderno].terminal_report = report;
+    }
+    if( category == 3 ) {
+      registry[orderno].trucking_report = report;
+    }
+    emit ReportSubmit(orderno, category, report);
+  }
+
+  function getReport(string memory orderno,uint category) public view returns(string memory) {
+    if(category == 1) {
+      return registry[orderno].refinery_report;
+    }
+    if( category == 2 ) {
+      return registry[orderno].terminal_report;
+    }
+    if( category == 3 ) {
+      return registry[orderno].trucking_report;
+    }
+    return "undefined";
+  }
+
+  function fetchInitialDetails(string memory orderno) public view returns(string memory, uint256, uint256,string memory) {
+    return (registry[orderno].product_name,
+            registry[orderno].refinery_value,
+            registry[orderno].refinery_quantity,
+            registry[orderno].refinery_date);
+  }
+
+  function getTerminalValues(string memory orderno) public view returns(string memory,string memory, uint256, uint256) {
+    return (registry[orderno].product_name , registry[orderno].terminal_date,
+            registry[orderno].terminal_value, registry[orderno].terminal_quantity);
+  }
+
+  function getTruckingDetails(string memory orderno) public view returns(string memory, string memory, uint256, uint256) {
+    return (registry[orderno].product_name,
+    registry[orderno].trucking_date,
+    registry[orderno].trucking_value,
+    registry[orderno].trucking_quantity);
+  }
+
+}
+
+
