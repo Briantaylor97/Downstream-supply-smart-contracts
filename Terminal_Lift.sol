@@ -10,6 +10,7 @@ contract TerminalPurchaseTruck {
     uint public _volume;
     uint public usgcPlatts;
     uint public value;
+    bool active = true;
     
     modifier onlyOwner() {
         require(msg.sender == owner, "You cannot modify this contract");
@@ -25,7 +26,7 @@ contract TerminalPurchaseTruck {
         usgcPlatts = Price;
     }
     
-    //Getter function to 
+    //Getter function for inputs
     function getPurchase()public view returns(address payable, string memory, string memory, uint, uint) {
         return (_buyer, deliveryDate, productType, _volume, usgcPlatts);
     }
@@ -40,3 +41,20 @@ contract TerminalPurchaseTruck {
         value = msg.value / 2;
         require((2 * value) == msg.value);
     }
+    
+    //deposit money the owner(Trucking company to rack supplyt contract)
+    function deposit() public payable {
+        uint amount =  msg.value + (_volume * usgcPlatts);
+        owner.transfer(amount);
+        require(msg.sender == owner || msg.sender == _buyer, "You are not authorized to execute this contract.");
+        require(active == true, "Contract not active.");
+        // @TODO: take care of a potential remainder by sending back to HR (`msg.sender`)
+        
+        _buyer.transfer(msg.value - amount);
+    }
+
+    function() external payable {
+        // @TODO: Enforce that the `deposit` function is called in the fallback function!
+        deposit();
+    }
+}
