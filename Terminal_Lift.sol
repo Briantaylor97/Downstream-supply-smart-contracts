@@ -5,10 +5,10 @@ pragma solidity ^0.5.11;
 contract TerminalPurchaseTruck {
     address payable owner;
     address payable _buyer;
-    string deliveryDate;
-    string productType;
-    uint _volume;
-    uint usgcPlatts;
+    string public deliveryDate;
+    string public productType;
+    uint public _volume;
+    uint public usgcPlatts;
     
     modifier onlyOwner() {
         require(msg.sender == owner, "You cannot modify this contract");
