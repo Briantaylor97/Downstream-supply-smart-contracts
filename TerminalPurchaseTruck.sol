@@ -37,3 +37,21 @@ contract TerminalPurchaseTruck {
         usgcPlatts = Rack_Price;
     }
 }
+
+     // struct Product {
+    //     address payable owner;
+    //     string product_type;
+    //     string delivery_date;
+    //     uint volume;
+    //     uint usgc_platts;
+    // }
+    
+    //Fees associated with Rack lifting by truck.
+    // struct Fees {
+    //     uint throughput_fee;
+    //     uint terminal_fee;
+    //     uint additional_fee;
+    //     uint excise_FST_gas;
+    //     uint excise_TX_gas;
+        
+    // }

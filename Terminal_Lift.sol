@@ -9,6 +9,7 @@ contract TerminalPurchaseTruck {
     string public productType;
     uint public _volume;
     uint public usgcPlatts;
+    uint public value;
     
     modifier onlyOwner() {
         require(msg.sender == owner, "You cannot modify this contract");
@@ -29,11 +30,13 @@ contract TerminalPurchaseTruck {
         return (_buyer, deliveryDate, productType, _volume, usgcPlatts);
     }
     // //Set product lifting from Rack.
-    function productLift(address payable my_buyer, string memory delivery_date, string memory product_type, uint my_volume, uint Rack_Price) public {
+    function productLift(address payable my_buyer, string memory delivery_date, string memory product_type, uint my_volume, uint Rack_Price) public payable{
         _buyer = my_buyer;
         deliveryDate = delivery_date;
         productType = product_type;
         _volume = my_volume;
         usgcPlatts = Rack_Price;
+        owner = msg.sender;
+        value = msg.value / 2;
+        require((2 * value) == msg.value);
     }
-}
