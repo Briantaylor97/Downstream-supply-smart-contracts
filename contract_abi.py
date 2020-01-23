@@ -1,3 +1,4 @@
+#deployed abi section pasted between  '''  '''
 abi = '''[
 	{
 		"constant": false,
