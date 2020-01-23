@@ -1,0 +1,88 @@
+pragma solidity ^0.5.0;
+
+
+contract OrderRegistry {
+  struct Order {
+
+    address payable owner;
+    address payable _buyer;
+    string buyer_name;
+    string seller_name;
+    string deliveryDate;
+    string productType;
+    uint _volume;
+    uint usgcPlatts;
+    uint value;
+    
+    
+    string transaction_report;
+    
+    }
+    
+modifier onlyOwner() {
+    require(msg.sender == owner, "You cannot modify this contract");
+    _;
+
+  }
+
+  mapping(string=>Order) registry;
+
+  event ReportSubmit(string orderno, address payable owner, address payable _buyer, string buyer_name, string seller_name, uint _volume, uint value);
+
+
+  function createTransaction(address payable my_buyer, string memory delivery_date, string memory product_type, uint galons, uint usgcPlatts) public payable{
+
+    registry[orderno]._buyer = buyer_address;
+    registry[orderno].deliveryDate = deliveryDate;
+    registry[orderno].productType = product_type;
+    registry[orderno]._volume = galons;
+    registry[orderno].usgcPlatts = usgcPlatts;
+    registry[orderno].owner = msg.sender;
+    registry[orderno].value = msg.value/2;
+    require((2*value) == msg.value);
+    
+    
+  
+    emit ReportSubmit(orderno);
+  }
+
+    //deposit money the owner(Trucking company to rack supplyt contract)
+    function deposit() public payable {
+        uint amount =  msg.value + (_volume * usgcPlatts);
+        owner.transfer(amount);
+        require(msg.sender == owner || msg.sender == _buyer, "You are not authorized to execute this contract.");
+        require(active == true, "Contract not active.");
+        // @TODO: take care of a potential remainder by sending back to HR (`msg.sender`)
+        
+        _buyer.transfer(msg.value - amount);
+    }
+    
+    
+    function() external payable {
+        // @TODO: Enforce that the `deposit` function is called in the fallback function!
+        deposit();
+    }
+
+  function getReport(string memory orderno,uint category) public view returns(string memory) {
+    if(category == 1) {
+      return registry[orderno].buyer_report;
+    }
+    if( category == 2 ) {
+      return registry[orderno].seller_report;
+    }
+    if( category == 3 ) {
+      return registry[orderno].trucking_report;
+    }
+    return "undefined";
+  }
+
+  function fetchInitialDetails(string memory orderno) public view returns(string memory, uint256, uint256,string memory) {
+    return (registry[orderno].productType,
+            registry[orderno].usgcPlatts,
+            registry[orderno]._volume,
+            registry[orderno].deliveryDate);
+  }
+
+
+
+}
