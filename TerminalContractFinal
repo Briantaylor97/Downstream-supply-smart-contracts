@@ -1,0 +1,78 @@
+pragma solidity ^0.5.16;
+
+//remit payment to refinery for product and fees for delivery to terminal 
+contract TerminalPurchaseTruck {
+    address payable public owner;
+    address payable public buyer;
+    string public Date;
+    string public Product;
+    uint public Volume;
+    uint public usgcPlatts;
+    uint public value;
+    bool active = true;
+    
+    // mapping (address => uint) pendingWithdrawals;
+
+    modifier onlyOwner() {
+        require(msg.sender == buyer, "You cannot modify this contract");
+        _;
+    }
+    
+    modifier condition(bool _condition) {
+        require(_condition);
+        _;
+    }
+
+    modifier onlySeller() {
+        require(
+            msg.sender == owner,
+            "Only owner can call this."
+        );
+        _;
+    }
+    
+    constructor(address payable newBuyer, string memory deliveryDate, string memory productType, uint TruckVolume, uint rackPrice) public payable {
+        owner = msg.sender;
+        buyer = newBuyer;
+        value = msg.value;
+        Date = deliveryDate;
+        Product = productType;
+        Volume = TruckVolume;
+        usgcPlatts = rackPrice;
+    }
+    
+    //Getter function for inputs
+    function getPurchase()public view returns(address payable, string memory, string memory, uint, uint) {
+        return (buyer, Date, Product, Volume, usgcPlatts);
+    }
+    // //Set product lifting from Rack.
+    // function productLift(address payable newBuyer, string memory delivery_date, string memory product_type, uint TruckVolume, uint Price) public payable{
+    //     buyer = newBuyer;
+    //     Date = delivery_date;
+    //     Product = product_type;
+    //     Volume = TruckVolume;
+    //     usgcPlatts = Price;
+    // }
+    
+    //deposit money the owner(Trucking company to rack supplyt contract)
+    function deposit() public payable returns (bool) {
+        uint amount = msg.value;
+        buyer.transfer(amount);
+        require(msg.sender == owner || msg.sender == buyer, "You are not authorized to execute this contract.");
+        require(active == true, "Contract not active.");
+        // @TODO: take care of a potential remainder by sending back to HR (`msg.sender`)
+        return true;
+    }
+    
+    
+//     function withdraw() public {
+//       uint amount = pendingWithdrawals[msg.sender];
+//       pendingWithdrawals[msg.sender] = 0;
+//       msg.sender.transfer(amount);
+//   } 
+
+    function() external payable {
+        // @TODO: Enforce that the `deposit` function is called in the fallback function!
+
+    }
+}
